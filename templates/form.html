@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% block title %}Issue Bot Test-Form {{version}}{% endblock %}
+{% block js %}
+'use strict';
+
+function createUUID() {
+   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+	  let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+	  return v.toString(16);
+   });
+}
+
+function showSuccess(message) {
+    const e = document.getElementById('success-text');
+	const n = document.getElementById('success-notification');
+	n.classList.remove('is-hidden');
+	e.innerHTML = message;
+}
+
+function hideSuccess() {
+    const e = document.getElementById('success-text');
+	const n = document.getElementById('success-notification');
+	e.innerHTML = '';
+	n.classList.add('is-hidden');
+}
+
+function showError(message) {
+    const e = document.getElementById('error-text');
+	const n = document.getElementById('error-notification');
+	n.classList.remove('is-hidden');
+	e.innerHTML = message;
+}
+
+
+function hideError() {
+    const e = document.getElementById('error-text');
+	const n = document.getElementById('error-notification');
+	e.innerHTML = '';
+	n.classList.add('is-hidden');
+}
+
+function sendRequest(url, jsonData, callback) {
+	const xhr = new XMLHttpRequest();
+	xhr.open('POST', url);
+	xhr.setRequestHeader('Content-Type', 'application/json');
+	xhr.send(jsonData)
+
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+			callback(JSON.parse(this.responseText));
+		}
+    }
+
+	xhr.onerror = function(event) {
+		showError("error on request!");
+	}
+}
+
+function labelForm() {
+	const url = '{{correction_url}}';
+	const form = document.getElementById('labelForm');
+
+    const formData = new FormData(form);
+	const jsonData = JSON.stringify(Object.fromEntries(formData));
+
+	sendRequest(url, jsonData, (resp) => {
+		showSuccess('Label for issue '+ formData.get('id') +' corrected!');
+	});
+	form.reset();
+	return false;
+}
+
+function issueForm() {
+	const url = '{{issue_url}}';
+	const form = document.getElementById('issueForm');
+	const uuid = createUUID();
+
+    const formData = new FormData(form);
+	formData.append('id', uuid);
+	const jsonData = JSON.stringify(Object.fromEntries(formData));
+
+	sendRequest(url, jsonData, (resp) => {
+		document.getElementById(resp.label).checked = true;
+		document.getElementById('label-id').value = uuid;
+		showSuccess('Issue ' + uuid + ' submitted!');
+
+	});
+	form.reset();
+	return false;
+}
+{% endblock %}
+{% block content %}
+<div class="notification is-danger is-light is-hidden" id="error-notification">
+  <button class="delete" onclick="hideError()"></button>
+  <span id="error-text"></span>
+</div>
+<div class="notification is-success is-light is-hidden" id="success-notification">
+  <button class="delete" onclick="hideSuccess()"></button>
+  <span id="success-text"></span>
+</div>
+
+<section class="section">
+	<h1 class="title">
+		Issue Bot {{version}}
+	</h1>
+	<h2 class="subtitle">
+		Test-Form <i>{{flask_env}}</i>
+	</h2>
+</section>
+<div class="columns">
+    <div class="column">
+		<h1 class="title">Input</h1>
+		<form type="POST" id="issueForm" onsubmit="return issueForm()">
+			<input type="hidden" name="test" value="true">
+			<div class="field">
+				<label class="label">Issue Title</label>
+				<div class="control">
+					<input class="input" type="text" placeholder="Issue Title" name="title">
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">Issue Body</label>
+				<div class="control">
+					<textarea class="textarea" placeholder="Issue Body" name="body"></textarea>
+				</div>
+			</div>
+			<div class="control">
+				<button class="button is-primary">Submit</button>
+			</div>
+		</form>
+    </div>
+    <div class="column">
+		<h1 class="title">Output</h1>
+		<form type="POST" id="labelForm" onsubmit="return labelForm()">
+			<input type="hidden" name="id" value="" id="label-id">
+			<div class="field">
+  				<label class="label">Issue Label</label>
+				<div class="control">
+	    			<label class="radio">
+	    				<input type="radio" name="label" value="bug" id="bug">
+	    				bug
+	  				</label>
+				</div>
+			</div>
+			<div class="field">
+				<div class="control">
+	  				<label class="radio">
+	    				<input type="radio" name="label" value="enhancement" id="enhancement">
+	   		 			enhancement
+	  				</label>
+				</div>
+			</div>
+			<div class="field">
+				<div class="control">
+	  				<label class="radio">
+	    				<input type="radio" name="label" value="question" id="question">
+	    				question
+	  				</label>
+				</div>
+			</div>
+			<div class="control">
+				<button class="button is-danger">Correct label</button>
+			</div>
+		</form>
+    </div>
+</div>
+{% endblock %}

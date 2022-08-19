@@ -1,0 +1,48 @@
+d3f12641-b652-4470-8167-c642b745d320,Metadata DB lock wait timeout exceeded when delete from xcom table(airflow,"We are seeing airflow DAG reported failed occasionally due to table lock timeout while delete from xcom table
+
+Exception:
+(pymysql.err.OperationalError) (1205, 'Lock wait timeout exceeded; try restarting transaction')
+[SQL: DELETE FROM xcom WHERE xcom.dag_id = %(dag_id_1)s AND xcom.task_id = %(task_id_1)s AND xcom.execution_date = %(execution_date_1)s]
+[parameters: {'dag_id_1': 'XXXXXXX', 'task_id_1': 'XXXXXXXX', 'execution_date_1': datetime.datetime(2022, 8, 16, 0, 0)}]
+",enhancement
+10672dc7-0ce2-4a28-8afc-4fe43028d7a2,Get back TI list page bulk actions that were removed in 2.3 #25724,"TI list page bulk actions that were mistakenly removed in 2.3 by this PR.
+That's why the only action you can access on TI is Delete",enhancement
+77196903-7246-422c-a41b-e50376b708ee,conn_id for S3 logging isn't defined using SecretsManagerBackend #25706  Open,"Remote logging does not work. All task logs in the UI report:
+",enhancement
+1b0ebd6c-2c22-4728-aa45-70a6bee2f140,"Tasks get stuck at random, never execute, get skipped after dag timeout ","I have multiple dags running regularly. Dags fail randomly for no reason. When I look at the grid view, one task is in skipped state due to dag timeout. But that task did not get executed during the entire period until timeout.
+
+This happens randomly to any dag, to any task, at any time.
+",enhancement
+518146f6-e21f-4a9d-9031-2545792fa42f,Scheduler livenessProbe errors on new helm chart,"Only livenessProbe config before and during the issue:
+",enhancement
+17728a81-e59d-4dcf-bb84-a405d4369c7d,Improve audit log #25641,"See the discussion. There are a couple of improvements that can be done:
+
+add atribute to download the log rather than open it in-browser
+add .log or similar (.txt?) extension
+sort the output
+possibly more",enhancement
+5370643a-9351-49a2-95b4-a73c59f15edd,Cannot reference airflow_local_settings in config settings ,"I am trying to pass some different keepalive args to the SqlAlchemy connection as per the documentation recommendation. (See the values.yaml snippet added to the issue).
+With this change in place the chart fails to upgrade as the database migrations never complete.",enhancement
+2c5ba2a9-7bce-42e1-ac15-7ac4889db24c,"Backfill mode with mapped tasks: ""Failed to populate all mapping metadata"" #25698",I was backfilling some DAGs that use dynamic tasks when I got an exception like the following:,enhancement
+a01000e2-f466-47b6-8075-53f27a4891a0,"we have integrated ldap configuration in ""webserver_config.py"" as per the documentation, but when I am trying to login it throwing error like below .","What you think should happen instead
+No response
+
+How to reproduce
+No response
+
+Operating System
+using airflow docker image 2.1.2-python.3.8
+",enhancement
+7875fd06-ef43-4e89-bed2-f43f69d86e87,"Deferrable Operators get stuck as ""scheduled"" during backfill ","If you try to backfill a DAG that uses any deferrable operators, those tasks will get indefinitely stuck in a ""scheduled"" state.
+
+If I watch the Grid View, I can see the task state change: ""scheduled"" (or sometimes ""queued"") -> ""deferred"" -> ""scheduled"". I've tried leaving in this state for over an hour, but there are no further state changes.
+
+When the task is stuck like this, the log appears as empty in the web UI. The corresponding log file does exist on the worker, but it does not contain any errors or warnings that might point to the source of the problem.
+
+Ctrl-C-ing the backfill at this point seems to hang on ""Shutting down LocalExecutor; waiting for running tasks to finish."" Force-killing and restarting the backfill will ""unstick"" the stuck tasks. However, any deferrable operators downstream of the first will get back into that stuck state, requiring multiple restarts to get everything to complete successfully.",enhancement
+7836ee79-1bad-421b-897d-55be52604bc6,Google cloud tasks sensor addition ,"Needed a sensor for cloud tasks which can check if the cloud task queue is empty or not
+
+Use case/motivation
+We quite often find need of us waiting for cloud task queue to get empty before we trigger rest of the tasks in airflow DAG.
+
+Related issues",enhancement
