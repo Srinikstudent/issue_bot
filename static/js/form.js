@@ -3,7 +3,7 @@ form.onsubmit = function(event){
         var xhr = new XMLHttpRequest();
         var formData = new FormData(form);
         //open the request
-        xhr.open('POST','http://localhost:5000/api/label')
+        xhr.open('POST','https://gt-srini-bot.herokuapp.com/api/label')
         xhr.setRequestHeader("Content-Type", "application/json");
 
         //send the form data
