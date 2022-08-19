@@ -22,7 +22,7 @@ flask_env = environ.get('FLASK_ENV')
     
 def predict_label(issue_id, title, body, is_test):
    
-    X = ['title'] + ['body']
+    X = [title] + [body]
     label = model.predict(X)
     print('issue_id is ' + issue_id + ' label is ' + label )
     print (is_test)
