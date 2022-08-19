@@ -15,7 +15,7 @@ import pandas as pd
 version = '0.0.1'
 app = Flask(__name__)
 CORS(app)
-model = joblib.load('../notebooks/model1.sav')
+model = joblib.load('./notebooks/model1.sav')
 
 flask_env = environ.get('FLASK_ENV')
 
