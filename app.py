@@ -24,8 +24,19 @@ def predict_label(issue_id, title, body, is_test):
    
     X = [title] + [body]
     label = model.predict(X)
-    return label[0]             
-
+    return label[0]     
+def correct_label(issue_id, correct_label):
+    print('issue_id is ' + issue_id + ' corrected label is ' + correct_label)
+    mylist = [] 
+  # for data in (issue_id, title, body, label[0]):
+    data = [issue_id, correct_label]
+    mylist.append(data)
+   # if len(mylist) == 1000:
+   #header = ['issue_id','corredted label']
+    data = mylist
+    with open('corrected_label_data.csv', 'a',encoding='UTF8', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerows(data)
 @app.route('/form', methods=['GET'])
 def form():
     """
