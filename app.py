@@ -22,7 +22,7 @@ flask_env = environ.get('FLASK_ENV')
     
 def predict_label(issue_id, title, body, is_test):
    
-    X = [title] + [body]
+    X = [title + ' ' + body]
     label = model.predict(X)
     return label[0]     
 def correct_label(issue_id, correct_label):
